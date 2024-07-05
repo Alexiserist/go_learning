@@ -1,19 +1,15 @@
 package main
 
 import (
-	"go_learning/config"
 	"go_learning/database"
 	"go_learning/internal/routes"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "go_learning/docs"
 )
 
-func main()  {
-	config := config.LoadConfig();
-	database.Init(config);
 
+func main()  {
+	database.Init();
 	router := routes.LoadRouter();
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler));
 	router.Run(":8080");
 
 }

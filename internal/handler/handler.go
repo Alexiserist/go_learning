@@ -1,4 +1,4 @@
-package controller
+package handler
 
 import (
 	"net/http"
@@ -8,10 +8,10 @@ import (
 
 // @Summary Health Check
 // @Description Checks the health of the server
-// @Tags health
+// @Tags Health Check
 // @Produce plain
 // @Success 200 {string} string "OK"
 // @Router /healthCheck [get]
-func HealthCheckController(g *gin.Context) {
+func HealthCheckHandler(g *gin.Context) {
 	g.String(http.StatusOK, "OK")
 }

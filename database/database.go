@@ -11,7 +11,8 @@ import (
 
 var DB *sql.DB
 
-func Init(config config.Config){
+func Init(){
+	config := config.LoadConfig();
 	log.Print("Connected To Database:", config.DatabaseHost, ":", config.DatabasePort);
 	var err error
     psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
