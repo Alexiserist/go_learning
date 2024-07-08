@@ -1,6 +1,38 @@
+definitions:
+  models.Testing:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
+  /getTesting:
+    post:
+      consumes:
+      - application/json
+      description: Testing method get post delete update
+      parameters:
+      - description: Request Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Testing'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Testing'
+      summary: Testing
+      tags:
+      - Testing
   /healthCheck:
     get:
       description: Checks the health of the server

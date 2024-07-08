@@ -9,7 +9,8 @@ import (
 
 func LoadRouter() *gin.Engine{
 	router := gin.Default();
-	router.GET("/healthCheck", handler.HealthCheckHandler)
+	router.GET("/healthCheck", handler.HealthCheckHandler);
+	router.POST("/getTesting", handler.GetTesting);
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler));
 
 	return router;
