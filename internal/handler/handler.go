@@ -1,10 +1,13 @@
 package handler
 
 import (
-	"net/http"
 	"go_learning/internal/models"
+	"go_learning/utils"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
+
 
 // @Summary Health Check
 // @Description Checks the health of the server
@@ -28,9 +31,8 @@ func HealthCheckHandler(g *gin.Context) {
 func GetTesting(g *gin.Context){
 	var model  models.Testing;
 	if err := g.ShouldBindBodyWithJSON(model); err != nil {
-		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()});
+		utils.RespondWithStatusMessage(g, http.StatusBadRequest, err.Error());
 		return;
 	}
-	g.String(http.StatusOK, "OK");
-
+	utils.RespondWithStatusMessage(g, http.StatusAccepted, http.StatusText(http.StatusOK));
 }
