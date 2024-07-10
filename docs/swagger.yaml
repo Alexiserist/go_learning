@@ -7,6 +7,18 @@ definitions:
         type: integer
       username:
         type: string
+    required:
+    - email
+    - username
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
     type: object
 info:
   contact: {}
@@ -46,4 +58,56 @@ paths:
       summary: Health Check
       tags:
       - Health Check
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                items:
+                  $ref: '#/definitions/models.User'
+                type: array
+              message:
+                type: string
+              status:
+                type: integer
+            type: object
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create users
+      parameters:
+      - description: Request Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/models.User'
+              message:
+                type: string
+              status:
+                type: integer
+            type: object
+      summary: Create users
+      tags:
+      - Users
 swagger: "2.0"

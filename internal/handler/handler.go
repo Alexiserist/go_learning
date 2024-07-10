@@ -30,9 +30,9 @@ func HealthCheckHandler(g *gin.Context) {
 // @Router /getTesting [post]
 func GetTesting(g *gin.Context){
 	var model  models.Testing;
-	if err := g.ShouldBindBodyWithJSON(model); err != nil {
+	if err := g.ShouldBindBodyWithJSON(&model); err != nil {
 		utils.RespondWithStatusMessage(g, http.StatusBadRequest, err.Error());
 		return;
 	}
-	utils.RespondWithStatusMessage(g, http.StatusAccepted, http.StatusText(http.StatusOK));
+	utils.ResponseWithStatusNessageData(g, http.StatusAccepted, http.StatusText(http.StatusOK), model);
 }
