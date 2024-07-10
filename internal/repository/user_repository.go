@@ -26,7 +26,7 @@ func (r *userRepository) FindAll() ([]models.User, error){
 
 
 func (r *userRepository) CreateUser(user models.User) (models.User,error) {
-	if err := database.DB.Create(&user).Error; err != nil {
+	if err := database.DB.Save(&user).Error; err != nil {
 		return user, err
 	}
 	return user,nil
