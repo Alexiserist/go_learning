@@ -1,10 +1,8 @@
 definitions:
-  models.Testing:
+  models.CreateUser:
     properties:
       email:
         type: string
-      id:
-        type: integer
       username:
         type: string
     required:
@@ -19,45 +17,13 @@ definitions:
         type: integer
       username:
         type: string
+    required:
+    - email
+    - username
     type: object
 info:
   contact: {}
 paths:
-  /getTesting:
-    post:
-      consumes:
-      - application/json
-      description: Testing method get post delete update
-      parameters:
-      - description: Request Body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Testing'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Testing'
-      summary: Testing
-      tags:
-      - Testing
-  /healthCheck:
-    get:
-      description: Checks the health of the server
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Health Check
-      tags:
-      - Health Check
   /users:
     get:
       consumes:
@@ -82,6 +48,7 @@ paths:
       summary: Get all users
       tags:
       - Users
+      x-order: 1
     post:
       consumes:
       - application/json
@@ -92,7 +59,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.CreateUser'
       produces:
       - application/json
       responses:
@@ -110,4 +77,58 @@ paths:
       summary: Create users
       tags:
       - Users
+      x-order: 3
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Users By Key
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+            type: object
+      summary: Delete Users By Key
+      tags:
+      - Users
+      x-order: 4
+    get:
+      consumes:
+      - application/json
+      description: Get Users By Key
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+            type: object
+      summary: Get Users By Key
+      tags:
+      - Users
+      x-order: 2
 swagger: "2.0"

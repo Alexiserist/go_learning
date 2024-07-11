@@ -15,60 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/getTesting": {
-            "post": {
-                "description": "Testing method get post delete update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Testing"
-                ],
-                "summary": "Testing",
-                "parameters": [
-                    {
-                        "description": "Request Body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Testing"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Testing"
-                        }
-                    }
-                }
-            }
-        },
-        "/healthCheck": {
-            "get": {
-                "description": "Checks the health of the server",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "Health Check"
-                ],
-                "summary": "Health Check",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/users": {
             "get": {
                 "description": "Get all users",
@@ -103,7 +49,8 @@ const docTemplate = `{
                             }
                         }
                     }
-                }
+                },
+                "x-order": 1
             },
             "post": {
                 "description": "Create users",
@@ -124,7 +71,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.CreateUser"
                         }
                     }
                 ],
@@ -146,12 +93,93 @@ const docTemplate = `{
                             }
                         }
                     }
-                }
+                },
+                "x-order": 3
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "Get Users By Key",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get Users By Key",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-order": 2
+            },
+            "delete": {
+                "description": "Delete Users By Key",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete Users By Key",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-order": 4
             }
         }
     },
     "definitions": {
-        "models.Testing": {
+        "models.CreateUser": {
             "type": "object",
             "required": [
                 "email",
@@ -161,9 +189,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "username": {
                     "type": "string"
                 }
@@ -171,6 +196,10 @@ const docTemplate = `{
         },
         "models.User": {
             "type": "object",
+            "required": [
+                "email",
+                "username"
+            ],
             "properties": {
                 "email": {
                     "type": "string"

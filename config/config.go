@@ -28,3 +28,11 @@ func LoadConfig() Config {
         DatabaseName:     os.Getenv("DATABASE_NAME"),
     }
 }
+
+func GetSecret() string{
+    err := godotenv.Load("config/environment/.env")
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
+    return os.Getenv("SECRET_ACCESSTOKEN")
+}
