@@ -1,12 +1,39 @@
 definitions:
+  auth.AccessTokenResponse:
+    properties:
+      accessToken:
+        example: Token
+        type: string
+      message:
+        example: OK
+        type: string
+      status:
+        example: 200
+        type: integer
+    type: object
+  auth.UserLogin:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   models.CreateUser:
     properties:
       email:
+        type: string
+      isActive:
+        type: boolean
+      password:
         type: string
       username:
         type: string
     required:
     - email
+    - password
     - username
     type: object
   models.User:
@@ -15,6 +42,8 @@ definitions:
         type: string
       id:
         type: integer
+      isActive:
+        type: boolean
       username:
         type: string
     required:
@@ -24,6 +53,28 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Request Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.AccessTokenResponse'
+      summary: Authorization Login
+      tags:
+      - Auth
   /users:
     get:
       consumes:
@@ -48,7 +99,6 @@ paths:
       summary: Get all users
       tags:
       - Users
-      x-order: 1
     post:
       consumes:
       - application/json
@@ -77,7 +127,6 @@ paths:
       summary: Create users
       tags:
       - Users
-      x-order: 3
   /users/{id}:
     delete:
       consumes:
@@ -104,7 +153,6 @@ paths:
       summary: Delete Users By Key
       tags:
       - Users
-      x-order: 4
     get:
       consumes:
       - application/json
@@ -130,5 +178,4 @@ paths:
       summary: Get Users By Key
       tags:
       - Users
-      x-order: 2
 swagger: "2.0"

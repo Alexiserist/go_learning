@@ -4,12 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func authRoute(router *gin.Context){
+func AuthRoute(router *gin.Engine){
 	authRepository := NewAuthRepository();
 	authService := NewAuthService(authRepository);
 	authHandler := NewAuthHandler(authService);
-
-
-	router.GET("/users", authHandler.GenerateToken);
+	router.POST("/auth/login", authHandler.Login);
 
 }

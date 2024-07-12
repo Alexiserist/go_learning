@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"go_learning/auth"
 	"go_learning/database"
 	"go_learning/internal/models"
 )
@@ -12,10 +13,14 @@ type UserRepository interface {
 	FindOneByKey(id uint) (models.User,error)
 }
 
-type userRepository struct{}
+type userRepository struct{
+	authService auth.AuthService
+}
 
 func NewUserRepository() UserRepository {
-    return &userRepository{}
+    return &userRepository{
+		authService: auth.NewAuthRepository(),
+	}
 }
 
 func (r *userRepository) FindAll() ([]models.User, error){
@@ -36,6 +41,11 @@ func (r *userRepository) FindOneByKey(id uint) (models.User,error){
 
 
 func (r *userRepository) CreateUser(user models.User) (models.User,error) {
+	encoded, err := r.authService.EncodingPassword(user.Password);
+	if err != nil {
+		return user,err
+	}
+	user.Password = encoded;
 	if err := database.DB.Save(&user).Error; err != nil {
 		return user, err
 	}

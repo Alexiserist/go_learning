@@ -17,18 +17,36 @@ func NewAuthHandler(authService AuthService) *AuthHandler {
 	}
 }
 
-// @Summary Get all users
-// @Description Get all users
-// @Tags Users
+
+// @Summary Authorization Login
+// @Description Login
+// @Tags Auth
 // @Accept  json
+// @Param body body auth.UserLogin true "Request Body"
 // @Produce  json
-// @Success 200 {object} object{status=int,message=string,data=[]models.User}
-// @Router /users [get]
-func (h *AuthHandler) GenerateToken(c *gin.Context) {
-	token, err := h.authService.GenerateToken()
+// @Success 200 {object} auth.AccessTokenResponse
+// @Router /auth/login [post]
+func (h *AuthHandler) Login(c *gin.Context) {
+	var userLogin UserLogin;
+	if err := c.ShouldBindBodyWithJSON(&userLogin); err != nil {
+		utils.RespondWithStatusMessage(c, http.StatusBadRequest, "Invalid request payload")
+        return
+    }
+	token, err := h.authService.LoginHandler(userLogin.Username,userLogin.Password);
 	if err != nil {
-		utils.RespondWithStatusMessage(c, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		switch err {
+		case utils.ErrInvalidCredentials:
+			utils.RespondWithStatusMessage(c, http.StatusUnauthorized, err.Error())
+		case utils.ErrTokenGeneration:
+			utils.RespondWithStatusMessage(c, http.StatusInternalServerError, err.Error())
+		default:
+			utils.RespondWithStatusMessage(c, http.StatusInternalServerError, "Internal server error")
+		}
 		return
 	}
-	utils.ResponseWithStatusNessageData(c, http.StatusOK, http.StatusText(http.StatusOK), token)
+	c.JSON(http.StatusOK, gin.H{
+		"status":   http.StatusOK,
+		"message":  "OK",
+		"data": 	token,
+	})
 }

@@ -2,7 +2,10 @@ package auth
 
 
 type AuthService interface {
-	GenerateToken() (string,error);
+	GenerateToken(username string) (string,error);
+	EncodingPassword(password string) (string,error);
+	CompareHashAndPassword(hash,password string) (bool);
+	LoginHandler(username,password string) (UserData,error);
 }
 
 type authService struct {
@@ -16,6 +19,19 @@ func NewAuthService(repo AuthRepository) AuthService{
 }
 
 
-func (s *authService) GenerateToken() (string, error) {
-	return s.authRepository.GenerateToken()
+func (s *authService) GenerateToken(username string) (string, error) {
+	return s.authRepository.GenerateToken(username)
+}
+
+
+func (s *authService) EncodingPassword(password string) (string,error){
+	return s.authRepository.EncodingPassword(password)
+}
+
+func (s *authService) CompareHashAndPassword(hash,password string) (bool){
+	return s.authRepository.CompareHashAndPassword(hash, password)
+}
+
+func (s *authService) LoginHandler(username,password string)(UserData,error){
+	return s.authRepository.LoginHandler(username,password)
 }

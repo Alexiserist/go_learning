@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"go_learning/auth"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -8,6 +9,7 @@ import (
 
 func LoadRouter() *gin.Engine{
 	router := gin.Default();
+	auth.AuthRoute(router);
 	UserRoute(router);
 
 

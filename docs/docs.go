@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Authorization Login",
+                "parameters": [
+                    {
+                        "description": "Request Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.AccessTokenResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get all users",
@@ -49,8 +83,7 @@ const docTemplate = `{
                             }
                         }
                     }
-                },
-                "x-order": 1
+                }
             },
             "post": {
                 "description": "Create users",
@@ -93,8 +126,7 @@ const docTemplate = `{
                             }
                         }
                     }
-                },
-                "x-order": 3
+                }
             }
         },
         "/users/{id}": {
@@ -134,8 +166,7 @@ const docTemplate = `{
                             }
                         }
                     }
-                },
-                "x-order": 2
+                }
             },
             "delete": {
                 "description": "Delete Users By Key",
@@ -173,20 +204,58 @@ const docTemplate = `{
                             }
                         }
                     }
-                },
-                "x-order": 4
+                }
             }
         }
     },
     "definitions": {
+        "auth.AccessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string",
+                    "example": "Token"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "auth.UserLogin": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.CreateUser": {
             "type": "object",
             "required": [
                 "email",
+                "password",
                 "username"
             ],
             "properties": {
                 "email": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "password": {
                     "type": "string"
                 },
                 "username": {
@@ -206,6 +275,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
                 },
                 "username": {
                     "type": "string"

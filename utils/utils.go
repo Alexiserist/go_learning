@@ -1,6 +1,15 @@
 package utils
 
-import "github.com/gin-gonic/gin"
+import (
+	"errors"
+
+	"github.com/gin-gonic/gin"
+)
+
+var (
+	ErrInvalidCredentials = errors.New("invalid username or password")
+	ErrTokenGeneration    = errors.New("error generating token")
+)
 
 type ApiStatusMessage struct {
 	Status 	   int 		`json:"status"`

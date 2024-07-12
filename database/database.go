@@ -14,19 +14,20 @@ import (
 
 var DB *gorm.DB
 
-func Init(){
+func Init() error{
 	config := config.LoadConfig();
-	log.Print("Connected To Database:", config.DatabaseHost, ":", config.DatabasePort);
+	log.Print("Connecting To Database:", config.DatabaseHost, ":", config.DatabasePort);
     psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
         config.DatabaseHost, config.DatabasePort, config.DatabaseUser, config.DatabasePassword, config.DatabaseName);
 
 	db,err := gorm.Open("postgres",psqlInfo);
 	if err != nil {
-		panic("failed to connect db")
+		log.Print("Failed to connect Database");
+		return err
 	}
 	MigrateDB(db);
-
-	DB = db
+	DB = db;
+	return nil
 }	
 
 func MigrateDB(db *gorm.DB){

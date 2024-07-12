@@ -8,7 +8,9 @@ import (
 
 
 func main()  {
-	database.Init();
+ 	err := database.Init();if err != nil {
+		return;
+	}
 	router := routes.LoadRouter();
 	router.Run(":8080");
 
