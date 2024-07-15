@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"go_learning/config"
 	"go_learning/database"
 	"go_learning/utils"
@@ -16,6 +17,7 @@ type AuthRepository interface {
 	EncodingPassword(string) (string,error)
 	CompareHashAndPassword(hash, password string) (bool)
 	LoginHandler(username string,password string) (UserData,error)
+	ValidateToken(token string) (error)
 }
 
 type authRepository struct {}
@@ -36,8 +38,19 @@ func (r *authRepository) GenerateToken(username string) (string,error){
 	ss,err := token.SignedString([]byte(secret));
 	if err != nil {
 		return "",err
-	}
+	};
 	return ss,nil
+}
+
+func (r *authRepository) ValidateToken(token string) (error){
+	_, err := jwt.Parse(token, 
+		func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("error validate token")
+		}
+		return []byte(config.GetSecret()), nil
+	})
+	return err
 }
 
 func (r *authRepository) EncodingPassword(password string) (string,error) {

@@ -6,6 +6,7 @@ type AuthService interface {
 	EncodingPassword(password string) (string,error);
 	CompareHashAndPassword(hash,password string) (bool);
 	LoginHandler(username,password string) (UserData,error);
+	ValidateToken(token string)(error);
 }
 
 type authService struct {
@@ -34,4 +35,8 @@ func (s *authService) CompareHashAndPassword(hash,password string) (bool){
 
 func (s *authService) LoginHandler(username,password string)(UserData,error){
 	return s.authRepository.LoginHandler(username,password)
+}
+
+func (s *authService) ValidateToken(token string)(error){
+	return s.authRepository.ValidateToken(token)
 }
