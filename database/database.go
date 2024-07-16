@@ -22,7 +22,7 @@ func Init() error{
 
 	db,err := gorm.Open("postgres",psqlInfo);
 	if err != nil {
-		log.Print("Failed to connect Database");
+		log.Printf("Failed to connect to Database: %v", err)
 		return err
 	}
 	MigrateDB(db);

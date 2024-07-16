@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"go_learning/auth"
+	"log"
 	"net/http"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 
 
 type AuthMiddleware interface {
+	AuthorizationMiddleware(c *gin.Context)
 }
 
 type authMiddleware struct{
@@ -22,16 +24,26 @@ func NewAuthMiddleware() AuthMiddleware {
 	}
 }
 
-func (m *authMiddleware) AuthorizationMiddleware(c *gin.Context){
-	header := c.Request.Header.Get("Authorization")
-	token := strings.TrimPrefix(header,"Bearer ")
-
-	if err := m.authService.ValidateToken(token); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status":   http.StatusOK,
-			"message":  "OK",
-			"data": 	token,
+func (m *authMiddleware) AuthorizationMiddleware(c *gin.Context) {
+	header := c.Request.Header.Get("Authorization");
+	log.Print(header);
+	if header == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status":  http.StatusUnauthorized,
+			"message": "Authorization header missing",
 		})
+		c.Abort()
+		return
 	}
 
+	token := strings.TrimPrefix(header, "Bearer ")
+	if err := m.authService.ValidateToken(token); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status":  http.StatusUnauthorized,
+			"message": "Invalid Token",
+		})
+		c.Abort()
+		return
+	}
+	c.Next()
 }

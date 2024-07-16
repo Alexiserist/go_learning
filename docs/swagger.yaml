@@ -50,8 +50,15 @@ definitions:
     - email
     - username
     type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
 info:
   contact: {}
+  description: Golang Framwork GIN ,Database Postgress, Gorm, Swaggo
+  title: Golang Framework GIN Swagger
+  version: "1.0"
 paths:
   /auth/login:
     post:
@@ -96,6 +103,8 @@ paths:
               status:
                 type: integer
             type: object
+      security:
+      - BearerAuth: []
       summary: Get all users
       tags:
       - Users
@@ -124,6 +133,8 @@ paths:
               status:
                 type: integer
             type: object
+      security:
+      - BearerAuth: []
       summary: Create users
       tags:
       - Users
@@ -150,6 +161,8 @@ paths:
               status:
                 type: integer
             type: object
+      security:
+      - BearerAuth: []
       summary: Delete Users By Key
       tags:
       - Users
@@ -175,7 +188,14 @@ paths:
               status:
                 type: integer
             type: object
+      security:
+      - BearerAuth: []
       summary: Get Users By Key
       tags:
       - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

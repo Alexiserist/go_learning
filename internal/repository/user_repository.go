@@ -2,8 +2,9 @@ package repository
 
 import (
 	"go_learning/auth"
-	"go_learning/database"
 	"go_learning/internal/models"
+
+	"github.com/jinzhu/gorm"
 )
 
 type UserRepository interface {
@@ -14,18 +15,20 @@ type UserRepository interface {
 }
 
 type userRepository struct{
+	db *gorm.DB
 	authService auth.AuthService
 }
 
-func NewUserRepository() UserRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
     return &userRepository{
 		authService: auth.NewAuthRepository(),
+		db : db,
 	}
 }
 
 func (r *userRepository) FindAll() ([]models.User, error){
 	var user []models.User
-	if err:= database.DB.Find(&user).Error; err != nil {
+	if err:= r.db.Find(&user).Error; err != nil {
 		return nil,err
 	}
 	return user, nil
@@ -33,8 +36,9 @@ func (r *userRepository) FindAll() ([]models.User, error){
 
 func (r *userRepository) FindOneByKey(id uint) (models.User,error){
 	var user models.User
-	if err:= database.DB.First(&user,id).Error; err != nil {
-		return user,err
+	err := r.db.First(&user, id).Error;
+	if err != nil {
+		return user, err
 	}
 	return user,nil
 }
@@ -46,7 +50,7 @@ func (r *userRepository) CreateUser(user models.User) (models.User,error) {
 		return user,err
 	}
 	user.Password = encoded;
-	if err := database.DB.Save(&user).Error; err != nil {
+	if err := r.db.Save(&user).Error; err != nil {
 		return user, err
 	}
 	return user,nil
@@ -54,7 +58,7 @@ func (r *userRepository) CreateUser(user models.User) (models.User,error) {
 
 
 func (r *userRepository) DeleteUser(user models.User) (error) {
-	if err := database.DB.Delete(&user,user).Error; err != nil {
+	if err := r.db.Delete(&user,user).Error; err != nil {
 		return err
 	}
 	return nil

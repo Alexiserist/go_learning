@@ -29,9 +29,9 @@ func NewAuthRepository() AuthRepository {
 func (r *authRepository) GenerateToken(username string) (string,error){
 	claim := &jwt.MapClaims{
 		"Username" : string(username),
-		"ExpiresAt": jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		"ExpiresAt": jwt.NewNumericDate(time.Now().Add(1 * time.Minute)),
 		"IssuedAt": jwt.NewNumericDate(time.Now()),
-		"NotBefore": jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		"NotBefore": jwt.NewNumericDate(time.Now().Add(1 * time.Minute)),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim);
 	secret := config.GetSecret();
@@ -43,14 +43,35 @@ func (r *authRepository) GenerateToken(username string) (string,error){
 }
 
 func (r *authRepository) ValidateToken(token string) (error){
-	_, err := jwt.Parse(token, 
+	parsedToken, err := jwt.Parse(token, 
 		func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("error validate token")
 		}
 		return []byte(config.GetSecret()), nil
 	})
-	return err
+	if err != nil {
+		return err
+	}
+	// if !parsedToken.Valid {
+	// 	return errors.New("token is expired");
+	// }
+	// claim, ok := parsedToken.Claims.(jwt.MapClaims)
+	// if !ok {
+	// 	return errors.New("token is expired");
+	// }
+
+	// exp, ok := claim["ExpiresAt"].(float64)
+	// if !ok {
+	// 	return errors.New("token is expired");
+	// }
+	// if int64(exp) < time.Now().Unix() {
+	// 	return errors.New("token is expired");
+	// }
+	if !parsedToken.Valid || parsedToken.Claims.(jwt.MapClaims)["ExpiresAt"].(float64) < float64(time.Now().Unix()) {
+		return errors.New("token is expired")
+	}
+	return nil
 }
 
 func (r *authRepository) EncodingPassword(password string) (string,error) {

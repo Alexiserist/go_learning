@@ -1,8 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Golang Framwork GIN ,Database Postgress, Gorm, Swaggo",
+        "title": "Golang Framework GIN Swagger",
+        "contact": {},
+        "version": "1.0"
     },
+    "host": "localhost:8080",
     "paths": {
         "/auth/login": {
             "post": {
@@ -40,6 +44,11 @@
         },
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get all users",
                 "consumes": [
                     "application/json"
@@ -75,6 +84,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create users",
                 "consumes": [
                     "application/json"
@@ -120,6 +134,11 @@
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get Users By Key",
                 "consumes": [
                     "application/json"
@@ -158,6 +177,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete Users By Key",
                 "consumes": [
                     "application/json"
@@ -273,5 +297,16 @@
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
     }
 }
