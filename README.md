@@ -5,6 +5,7 @@
 go mod init
 go get -u github.com/gin-gonic/gin
 go get -u github.com/lib/pq
+go get -u gorm.io/gorm
 go get -u github.com/swaggo/swag/cmd/swag
 go get -u github.com/swaggo/gin-swagger
 go get -u github.com/swaggo/files
@@ -15,6 +16,6 @@ go get -u github.com/swaggo/files
 ## Create Database Connection
 
 ## Create main.go
-    - intial Database and route controller
+    - intial Database -> route -> controller
 
 ## Run command $swag init 

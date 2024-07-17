@@ -254,9 +254,11 @@ const docTemplate = `{
             ],
             "properties": {
                 "password": {
+                    "description": "Extensions:\nx-order: \"1\"",
                     "type": "string"
                 },
                 "username": {
+                    "description": "This text will appear as description of your request body.\nin:body\nExtensions:\nx-order: \"0\"",
                     "type": "string"
                 }
             }

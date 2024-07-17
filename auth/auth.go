@@ -53,23 +53,8 @@ func (r *authRepository) ValidateToken(token string) (error){
 	if err != nil {
 		return err
 	}
-	// if !parsedToken.Valid {
-	// 	return errors.New("token is expired");
-	// }
-	// claim, ok := parsedToken.Claims.(jwt.MapClaims)
-	// if !ok {
-	// 	return errors.New("token is expired");
-	// }
-
-	// exp, ok := claim["ExpiresAt"].(float64)
-	// if !ok {
-	// 	return errors.New("token is expired");
-	// }
-	// if int64(exp) < time.Now().Unix() {
-	// 	return errors.New("token is expired");
-	// }
 	if !parsedToken.Valid || parsedToken.Claims.(jwt.MapClaims)["ExpiresAt"].(float64) < float64(time.Now().Unix()) {
-		return errors.New("token is expired")
+		return errors.New("Unauthorized")
 	}
 	return nil
 }

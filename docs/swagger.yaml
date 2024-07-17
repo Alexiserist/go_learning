@@ -14,8 +14,16 @@ definitions:
   auth.UserLogin:
     properties:
       password:
+        description: |-
+          Extensions:
+          x-order: "1"
         type: string
       username:
+        description: |-
+          This text will appear as description of your request body.
+          in:body
+          Extensions:
+          x-order: "0"
         type: string
     required:
     - password
